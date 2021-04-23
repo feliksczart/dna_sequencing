@@ -26,7 +26,7 @@ def pairUp(reads,min_overlap):
         if r2 not in reversed_pairs:
           reversed_pairs[r2] = np.array([[r1,o_rev]],dtype=object)
         else:
-          pairs[r2] = np.concatenate((pairs[r2], [[r1,o_rev]]))
+          reversed_pairs[r2] = np.concatenate((reversed_pairs[r2], [[r1,o_rev]]))
 
   return pairs, reversed_pairs
 

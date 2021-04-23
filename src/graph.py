@@ -1,6 +1,8 @@
+from networkx.generators import directed
 from pyvis.network import Network
 import networkx as nx
 import numpy as np
+import matplotlib.pyplot as plt
 
 def pairUp(reads,min_overlap):
   pairs = {}
@@ -52,11 +54,8 @@ def showGraph(dict):
   g.add_nodes_from(dict.keys())
 
   for k, v in dict.items():
-    g.add_edges_from(([(k, t[0]) for t in v]))
-
-  # for k, v in dict.items():
-  #   for t in v:
-  #     g.add_weighted_edges(k, t[0],weight=str(t[1]))
+    for t in v:
+      g.add_edge(k, t[0],label=str(t[1]))
 
 
   nt = Network('948px', '1888px')

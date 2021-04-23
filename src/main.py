@@ -7,8 +7,8 @@ def main():
     min_overlap = 5
 
     pairs, reversed_pairs = g.pairUp(reads,min_overlap)
-
-    print(len(pairs))
+    g.showGraph(pairs)
+    # print(pairs)
 
 if __name__ == "__main__":
     main()

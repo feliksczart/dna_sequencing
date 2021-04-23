@@ -17,20 +17,16 @@ def pairUp(reads,min_overlap):
       o_rev = calculate_overlap(r2,r1)
 
       if (o >= min_overlap):
-        # pairs.append([r1,r2])
         if r1 not in pairs:
-          # pairs[r1] = [[r2,o]]
-          pairs[r1] = np.array([r2],dtype=object)
+          pairs[r1] = np.array([[r2,o]],dtype=object)
         else:
-          # pairs[r1].append([r2,o])
-          pairs[r1] = np.concatenate((pairs[r1], [r2]))
+          pairs[r1] = np.concatenate((pairs[r1], [[r2,o]]))
 
       if (o_rev >= min_overlap):
-        # reversed_pairs.append([r2,r1])
         if r2 not in reversed_pairs:
-          reversed_pairs[r2] = [[r1,o_rev]]
+          reversed_pairs[r2] = np.array([[r1,o_rev]],dtype=object)
         else:
-          reversed_pairs[r2].append([r1,o_rev])
+          pairs[r2] = np.concatenate((pairs[r2], [[r1,o_rev]]))
 
   return pairs, reversed_pairs
 
@@ -56,10 +52,14 @@ def showGraph(dict):
   g.add_nodes_from(dict.keys())
 
   for k, v in dict.items():
-    g.add_edges_from(([(k, t) for t in v]))
+    g.add_edges_from(([(k, t[0]) for t in v]))
+
+  # for k, v in dict.items():
+  #   for t in v:
+  #     g.add_weighted_edges(k, t[0],weight=str(t[1]))
 
 
   nt = Network('1500px', '1500px')
-  # populates the nodes and edges data structures
+
   nt.from_nx(g)
   nt.show('graph.html')

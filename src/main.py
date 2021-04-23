@@ -4,11 +4,11 @@ import graph as g
 
 def main():
     reads = Loader('res/9.200-40.txt').load()
-    min_overlap = 5
+    min_overlap = 9
 
     pairs, reversed_pairs = g.pairUp(reads,min_overlap)
-    g.showGraph(pairs)
-    # print(pairs)
+    g.showGraph(reversed_pairs)
+
 
 if __name__ == "__main__":
     main()

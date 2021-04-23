@@ -59,7 +59,7 @@ def showGraph(dict):
   #     g.add_weighted_edges(k, t[0],weight=str(t[1]))
 
 
-  nt = Network('1500px', '1500px')
+  nt = Network('948px', '1888px')
 
   nt.from_nx(g)
   nt.show('graph.html')

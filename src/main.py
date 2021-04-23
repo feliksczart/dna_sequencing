@@ -15,7 +15,7 @@ def main():
     visited = set()
     visited = g.dfs(visited, pairs, list(pairs.keys())[0])
 
-    print("Visited: " + str(len(visited)/len(pairs.keys())) + "%")
+    print("Visited: " + str(100*len(visited)/len(pairs.keys())) + "%")
 
 
 if __name__ == "__main__":

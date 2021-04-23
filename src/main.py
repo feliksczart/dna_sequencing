@@ -10,7 +10,12 @@ def main():
 
     show_edge_val = True
     show_edge_dir = True
-    g.showGraph(reversed_pairs, show_edge_val, show_edge_dir)
+    # g.showGraph(pairs, show_edge_val, show_edge_dir)
+
+    visited = set()
+    visited = g.dfs(visited, pairs, list(pairs.keys())[0])
+
+    print("Visited: " + str(len(visited)/len(pairs.keys())) + "%")
 
 
 if __name__ == "__main__":

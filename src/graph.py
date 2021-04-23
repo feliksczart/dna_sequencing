@@ -62,3 +62,10 @@ def showGraph(dict,show_edge_val,show_edge_dir):
 
   nt.from_nx(g)
   nt.show('graph.html')
+
+def dfs(visited, graph, node):
+  if node not in visited:
+      visited.add(node)
+      for neighbour in graph[node]:
+          dfs(visited, graph, neighbour[0])
+  return visited

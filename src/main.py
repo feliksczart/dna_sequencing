@@ -7,7 +7,10 @@ def main():
     min_overlap = 5
 
     pairs, reversed_pairs = g.pairUp(reads,min_overlap)
-    g.showGraph(reversed_pairs)
+
+    show_edge_val = True
+    show_edge_dir = True
+    g.showGraph(reversed_pairs, show_edge_val, show_edge_dir)
 
 
 if __name__ == "__main__":

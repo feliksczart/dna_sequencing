@@ -48,17 +48,17 @@ def calculate_overlap(r1,r2):
   return overlap
 
 
-def showGraph(dict):
+def showGraph(dict,show_edge_val,show_edge_dir):
 
   g = nx.DiGraph()
   g.add_nodes_from(dict.keys())
 
   for k, v in dict.items():
     for t in v:
-      g.add_edge(k, t[0],label=str(t[1]))
+      g.add_edge(k, t[0],label=str(t[1]),arrowStrikethrough=not show_edge_val)
 
 
-  nt = Network('948px', '1888px')
+  nt = Network('948px', '1888px',directed=show_edge_dir)
 
   nt.from_nx(g)
   nt.show('graph.html')

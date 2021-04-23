@@ -2,7 +2,7 @@ class Loader:
     def __init__(self, fileName):
         self.fileName = fileName
 
-    def load(self):
+    def loadReads(self):
         f = open(self.fileName, 'r')
         reads = []
 

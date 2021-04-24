@@ -1,9 +1,9 @@
 from os import read
-from loader import Loader
-import graph as g
+from src.loader import Loader
+import src.graph as g
 
 def main():
-    reads = Loader('res/9.200-40.txt').loadReads()
+    reads = Loader('../res/9.200-40.txt').loadReads()
     min_overlap = 5
 
     pairs, reversed_pairs = g.pairUp(reads,min_overlap)

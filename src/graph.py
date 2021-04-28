@@ -6,34 +6,32 @@ import matplotlib.pyplot as plt
 
 def pairUp(reads,min_overlap):
   pairs = {}
-  reversed_pairs = {}
+  reversed_graph = {}
 
   for i in range(len(reads)):
     for j in range(len(reads)):
 
       if (j == i):
         continue
-      
+
       r1, r2 = reads[i], reads[j]
       o = calculate_overlap(r1,r2)
-      o_rev = calculate_overlap(r2,r1)
 
       if (o >= min_overlap):
         if r1 not in pairs:
           pairs[r1] = np.array([[r2,o]],dtype=object)
         else:
           pairs[r1] = np.concatenate((pairs[r1], [[r2,o]]))
-
-      if (o_rev >= min_overlap):
-        if r2 not in reversed_pairs:
-          reversed_pairs[r2] = np.array([[r1,o_rev]],dtype=object)
+        if r2 not in reversed_graph:
+          reversed_graph[r2] = np.array([[r1, o]], dtype=object)
         else:
-          reversed_pairs[r2] = np.concatenate((reversed_pairs[r2], [[r1,o_rev]]))
+          reversed_graph[r2] = np.concatenate((reversed_graph[r2], [[r1, o]]))
 
-  return pairs, reversed_pairs
+
+  return pairs, reversed_graph
 
 def calculate_overlap(r1,r2):
-  
+
   overlap = 0
   l = len(r1)
 
@@ -69,3 +67,31 @@ def dfs(visited, graph, node):
       for neighbour in graph[node]:
           dfs(visited, graph, neighbour[0])
   return visited
+
+#for now greedy_search returns vertices with max value for each node
+def greedy_search(graph,reversed_graph, all_nodes):
+  best_connection = len(list(graph.keys())[0]) - 1
+
+  good_connections = []
+
+  for node in all_nodes:
+
+
+    #all_nodes can include elements not in reversed_graph or graph
+    try:
+      bcc = [pointing for pointing in reversed_graph[node] if best_connection in pointing]
+    except:
+      bcc = []
+
+    try:
+      bc = [pointed for pointed in graph[node] if best_connection in pointed]
+    except:
+      bc = []
+
+    tmp = bc+bcc
+    bccc = {node: tmp}
+
+    good_connections.append(bccc)
+
+  return good_connections
+

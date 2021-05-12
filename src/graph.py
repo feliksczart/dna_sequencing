@@ -69,29 +69,28 @@ def dfs(visited, graph, node):
   return visited
 
 #for now greedy_search returns vertices with max value for each node
-def greedy_search(graph,reversed_graph, all_nodes):
+def get_good_connections(graph,reversed_graph, all_nodes,min_conn):
   best_connection = len(list(graph.keys())[0]) - 1
 
-  good_connections = []
+  good_conns = {}
+
 
   for node in all_nodes:
 
 
     #all_nodes can include elements not in reversed_graph or graph
     try:
-      bcc = [pointing for pointing in reversed_graph[node] if best_connection in pointing]
+      bcc = [pointing for pointing in reversed_graph[node] if any(c == pointing[1]for c in range(min_conn,best_connection+1))]
     except:
       bcc = []
 
     try:
-      bc = [pointed for pointed in graph[node] if best_connection in pointed]
+      bc = [pointed for pointed in graph[node] if any(c == pointed[1]for c in range(min_conn,best_connection+1))]
     except:
       bc = []
 
     tmp = bc+bcc
-    bccc = {node: tmp}
+    good_conns[node] = tmp
 
-    good_connections.append(bccc)
-
-  return good_connections
+  return good_conns
 

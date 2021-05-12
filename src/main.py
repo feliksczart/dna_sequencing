@@ -8,8 +8,8 @@ def main():
 
     pairs, reversed_pairs = g.pairUp(reads,min_overlap)
 
-    # show_edge_val = True
-    # show_edge_dir = True
+    show_edge_val = True
+    show_edge_dir = True
     # g.showGraph(pairs, show_edge_val, show_edge_dir)
 
     visited = set()
@@ -27,7 +27,8 @@ def main():
 
 
 
-    g.greedy_search(pairs,reversed_pairs,reads)
+    good_connections = g.get_good_connections(pairs,reversed_pairs,reads,7)
+    g.showGraph(good_connections, show_edge_val, False)
 
 if __name__ == "__main__":
     main()

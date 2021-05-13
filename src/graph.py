@@ -80,12 +80,12 @@ def get_good_connections(graph,reversed_graph, all_nodes,min_conn):
 
     #all_nodes can include elements not in reversed_graph or graph
     try:
-      bcc = [pointing for pointing in reversed_graph[node] if any(c == pointing[1]for c in range(min_conn,best_connection+1))]
+      bcc = [pointing for pointing in reversed_graph[node] if any(c == int(pointing[1]) for c in range(min_conn,best_connection+1))]
     except:
       bcc = []
 
     try:
-      bc = [pointed for pointed in graph[node] if any(c == pointed[1]for c in range(min_conn,best_connection+1))]
+      bc = [pointed for pointed in graph[node] if any(c == int(pointed[1]) for c in range(min_conn,best_connection+1))]
     except:
       bc = []
 

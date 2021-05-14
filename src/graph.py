@@ -94,3 +94,20 @@ def get_good_connections(graph,reversed_graph, all_nodes,min_conn):
 
   return good_conns
 
+def simple_path(good_conns):
+  get_mid_nodes(good_conns)
+
+def get_mid_nodes(good_conns):
+  mid_nodes = {}
+
+  for node in good_conns:
+    connected_nodes = []
+    for conn in good_conns[node]:
+      if int(conn[1]) == 9:
+        connected_nodes.append(conn)
+    if len(connected_nodes) > 1:
+      mid_nodes[node] = connected_nodes
+
+  return mid_nodes
+
+

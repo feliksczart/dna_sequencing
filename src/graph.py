@@ -95,10 +95,39 @@ def get_good_connections(graph,reversed_graph, all_nodes,min_conn):
 
   return good_conns
 
-def simple_path(good_conns,graph,reversed_graph):
+def simple_path(good_conns,graph,reversed_graph,all_nodes):
+  tmp = [False for _ in range(len(all_nodes))]
+  visited = dict(zip(all_nodes,tmp))
+
   tmp = get_mid_nodes(good_conns)
+
   node = starting_node(tmp, graph, reversed_graph)
+
+  bnd = best_next_node(graph, node)
+  bpn = best_prev_node(reversed_graph,node)
+
   return
+
+#TODO make the code cleaner
+def best_next_node(graph,node):
+  nd = graph[node]
+  maxx = -1
+  nexxt = None
+  for i in nd:
+    if int(i[1]) > maxx:
+      maxx = int(i[1])
+      nexxt = i
+  return nexxt
+
+def best_prev_node(reversed_graph,node):
+  nd = reversed_graph[node]
+  maxx = -1
+  prevv = None
+  for i in nd:
+    if int(i[1]) > maxx:
+      maxx = int(i[1])
+      prevv = i
+  return prevv
 
 def starting_node(good_conns,graph,reversed_graph):
   gc = good_conns

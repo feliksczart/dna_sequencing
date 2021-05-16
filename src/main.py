@@ -30,6 +30,6 @@ def main():
     good_connections = g.get_good_connections(pairs,reversed_pairs,reads,6)
     # g.showGraph(good_connections, show_edge_val, False)
 
-    g.simple_path(good_connections,pairs,reversed_pairs)
+    g.simple_path(good_connections,pairs,reversed_pairs,reads)
 if __name__ == "__main__":
     main()

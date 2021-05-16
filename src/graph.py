@@ -3,6 +3,7 @@ from pyvis.network import Network
 import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
+import random
 
 def pairUp(reads,min_overlap):
   pairs = {}
@@ -94,8 +95,18 @@ def get_good_connections(graph,reversed_graph, all_nodes,min_conn):
 
   return good_conns
 
-def simple_path(good_conns):
-  get_mid_nodes(good_conns)
+def simple_path(good_conns,graph,reversed_graph):
+  tmp = get_mid_nodes(good_conns)
+  node = starting_node(tmp, graph, reversed_graph)
+  return
+
+def starting_node(good_conns,graph,reversed_graph):
+  gc = good_conns
+  for node in gc:
+    for i in good_conns[node]:
+      if i in graph[node]:
+        if i in reversed_graph[node]:
+          return node
 
 def get_mid_nodes(good_conns):
   mid_nodes = {}

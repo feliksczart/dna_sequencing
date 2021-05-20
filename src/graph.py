@@ -62,6 +62,31 @@ def showGraph(dict,show_edge_val,show_edge_dir):
   nt.from_nx(g)
   nt.show('graph.html')
 
+def show_path_graph(dict,show_edge_val,show_edge_dir,path):
+
+  g = nx.DiGraph()
+  g.add_nodes_from(dict.keys())
+
+  pos = -1
+  for k, v in dict.items():
+    for i,n in enumerate(path):
+      if n == k:
+        pos = i
+        break
+    for t in v:
+      try:
+        if k == path[pos] and t[0] == path[pos+1]:
+          g.add_edge(k, t[0],label=str(t[1]),arrowStrikethrough=not show_edge_val,color = 'red')
+        else:
+          g.add_edge(k, t[0], label=str(t[1]), arrowStrikethrough=not show_edge_val)
+      except:
+        g.add_edge(k, t[0], label=str(t[1]), arrowStrikethrough=not show_edge_val)
+
+  nt = Network('948px', '1888px',directed=show_edge_dir)
+
+  nt.from_nx(g)
+  nt.show('graph.html')
+
 def dfs(visited, graph, node):
   if node not in visited:
       visited.add(node)
@@ -102,32 +127,52 @@ def simple_path(good_conns,graph,reversed_graph,all_nodes):
   tmp = get_mid_nodes(good_conns)
 
   node = starting_node(tmp, graph, reversed_graph)
+  visited[node] = True
 
-  bnd = best_next_node(graph, node)
-  bpn = best_prev_node(reversed_graph,node)
+  seq = [node]
 
-  return
+  best_next_node(graph, node, visited, seq)
+  best_prev_node(reversed_graph,node, visited, seq)
+
+  check_seq = set(seq)
+
+  return seq
 
 #TODO make the code cleaner
-def best_next_node(graph,node):
-  nd = graph[node]
-  maxx = -1
-  nexxt = None
-  for i in nd:
-    if int(i[1]) > maxx:
-      maxx = int(i[1])
-      nexxt = i
-  return nexxt
+def best_next_node(graph,node,visited,seq):
 
-def best_prev_node(reversed_graph,node):
-  nd = reversed_graph[node]
-  maxx = -1
-  prevv = None
-  for i in nd:
-    if int(i[1]) > maxx:
-      maxx = int(i[1])
-      prevv = i
-  return prevv
+  nd = graph[node]
+  maxx = 9
+  next = False
+  while (not next):
+    for i in nd:
+      if int(i[1]) == maxx and visited[i[0]] == False and i[0] in graph:
+        next = True
+        maxx = int(i[1])
+        visited[i[0]] = True
+        seq.append(i[0])
+        best_next_node(graph, i[0], visited, seq)
+    maxx -= 1
+    if maxx < 1:
+      break
+
+def best_prev_node(graph,node,visited,seq):
+
+
+    nd = graph[node]
+    maxx = 9
+    next = False
+    while (not next):
+      for i in nd:
+        if int(i[1]) == maxx and visited[i[0]] == False and i[0] in graph:
+          next = True
+          maxx = int(i[1])
+          visited[i[0]] = True
+          seq.insert(0,i[0])
+          best_prev_node(graph, i[0], visited, seq)
+      maxx -= 1
+      if maxx < 1:
+        break
 
 def starting_node(good_conns,graph,reversed_graph):
   gc = good_conns

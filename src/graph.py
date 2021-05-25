@@ -76,7 +76,7 @@ def show_path_graph(dict,show_edge_val,show_edge_dir,path):
     for t in v:
       try:
         if k == path[pos] and t[0] == path[pos+1]:
-          g.add_edge(k, t[0],label=str(t[1]),arrowStrikethrough=not show_edge_val,color = 'red')
+          g.add_edge(k, t[0],label=str(t[1]),arrowStrikethrough=not show_edge_val,color = 'red',width = 10)
         else:
           g.add_edge(k, t[0], label=str(t[1]), arrowStrikethrough=not show_edge_val)
       except:
@@ -84,7 +84,9 @@ def show_path_graph(dict,show_edge_val,show_edge_dir,path):
 
   nt = Network('948px', '1888px',directed=show_edge_dir)
 
+  nt.barnes_hut(spring_length=2)
   nt.from_nx(g)
+
   nt.show('graph.html')
 
 def dfs(visited, graph, node):

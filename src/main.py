@@ -4,7 +4,7 @@ import src.graph as g
 
 def main():
     reads = Loader('../res/9.200-40.txt').loadReads()
-    min_overlap = 6
+    min_overlap = 5
 
     pairs, reversed_pairs = g.pairUp(reads,min_overlap)
 

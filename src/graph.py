@@ -62,11 +62,12 @@ def showGraph(dict,show_edge_val,show_edge_dir):
   nt.from_nx(g)
   nt.show('graph.html')
 
-def show_path_graph(dict,show_edge_val,show_edge_dir,path):
+def show_path_graph(dict,show_edge_val,show_edge_dir,path,filename):
 
   g = nx.DiGraph()
   g.add_nodes_from(dict.keys())
 
+  test = 0
   pos = -1
   for k, v in dict.items():
     for i,n in enumerate(path):
@@ -75,19 +76,24 @@ def show_path_graph(dict,show_edge_val,show_edge_dir,path):
         break
     for t in v:
       try:
-        if k == path[pos] and t[0] == path[pos+1]:
+        if t[0] == path[pos+1]:
           g.add_edge(k, t[0],label=str(t[1]),arrowStrikethrough=not show_edge_val,color = 'red',width = 10)
+          test+=1
         else:
           g.add_edge(k, t[0], label=str(t[1]), arrowStrikethrough=not show_edge_val)
       except:
         g.add_edge(k, t[0], label=str(t[1]), arrowStrikethrough=not show_edge_val)
+    pos = -2
+    if (test > 1):
+      print("karramba")
+    test = 0
 
   nt = Network('948px', '1888px',directed=show_edge_dir)
 
   nt.barnes_hut(spring_length=2)
   nt.from_nx(g)
 
-  nt.show('graph.html')
+  nt.show(f'{filename}.html')
 
 def dfs(visited, graph, node):
   if node not in visited:
@@ -96,7 +102,7 @@ def dfs(visited, graph, node):
           dfs(visited, graph, neighbour[0])
   return visited
 
-#for now greedy_search returns vertices with max value for each node
+#returns vertices with value in range for each node
 def get_good_connections(graph,reversed_graph, all_nodes,min_conn):
   best_connection = len(list(graph.keys())[0]) - 1
 
@@ -136,7 +142,10 @@ def simple_path(good_conns,graph,reversed_graph,all_nodes):
   best_next_node(graph, node, visited, seq)
   best_prev_node(reversed_graph,node, visited, seq)
 
-  check_seq = set(seq)
+  #check for repeating nodes
+  if(len(set(seq)) != len(seq)):
+    print("Seome nodes are repeating!!")
+
 
   return seq
 
@@ -150,10 +159,11 @@ def best_next_node(graph,node,visited,seq):
     for i in nd:
       if int(i[1]) == maxx and visited[i[0]] == False and i[0] in graph:
         next = True
-        maxx = int(i[1])
+        maxx = 0
         visited[i[0]] = True
         seq.append(i[0])
         best_next_node(graph, i[0], visited, seq)
+        break
     maxx -= 1
     if maxx < 1:
       break
@@ -168,10 +178,11 @@ def best_prev_node(graph,node,visited,seq):
       for i in nd:
         if int(i[1]) == maxx and visited[i[0]] == False and i[0] in graph:
           next = True
-          maxx = int(i[1])
+          maxx = 0
           visited[i[0]] = True
           seq.insert(0,i[0])
           best_prev_node(graph, i[0], visited, seq)
+          break
       maxx -= 1
       if maxx < 1:
         break
@@ -192,6 +203,7 @@ def get_mid_nodes(good_conns):
     for conn in good_conns[node]:
       if int(conn[1]) == 9:
         connected_nodes.append(conn)
+
     if len(connected_nodes) > 1:
       mid_nodes[node] = connected_nodes
 

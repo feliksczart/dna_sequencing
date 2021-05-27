@@ -7,7 +7,7 @@ from os.path import isfile, join
 def main():
     pth = "../res"
     files = [f for f in listdir(pth) if isfile(join(pth, f))]
-    for i in files[15:40]:
+    for i in files[15:30]:
 
         # positive/negative instance filter
         if ("+" in i or i[-1] != '0'):
@@ -16,7 +16,7 @@ def main():
         print(i)
 
         run(i)
-    # run("9.200-80")
+    # run("35.200-40")
 
     # for i in files[:6]:
     #

@@ -67,26 +67,21 @@ def show_path_graph(dict,show_edge_val,show_edge_dir,path,filename):
   g = nx.DiGraph()
   g.add_nodes_from(dict.keys())
 
-  test = 0
-  pos = -1
+  pos = False
   for k, v in dict.items():
     for i,n in enumerate(path):
       if n == k:
         pos = i
         break
-    for t in v:
+    for next_node in v:
       try:
-        if t[0] == path[pos+1]:
-          g.add_edge(k, t[0],label=str(t[1]),arrowStrikethrough=not show_edge_val,color = 'red',width = 10)
-          test+=1
+        if next_node[0] == path[pos+1]:
+          g.add_edge(k, next_node[0],label=str(next_node[1]),arrowStrikethrough=not show_edge_val,color = 'red',width = 10)
         else:
-          g.add_edge(k, t[0], label=str(t[1]), arrowStrikethrough=not show_edge_val)
+          g.add_edge(k, next_node[0], label=str(next_node[1]), arrowStrikethrough=not show_edge_val)
       except:
-        g.add_edge(k, t[0], label=str(t[1]), arrowStrikethrough=not show_edge_val)
-    pos = -2
-    if (test > 1):
-      print("karramba")
-    test = 0
+        g.add_edge(k, next_node[0], label=str(next_node[1]), arrowStrikethrough=not show_edge_val)
+    pos = False
 
   nt = Network('948px', '1888px',directed=show_edge_dir)
 
@@ -209,4 +204,7 @@ def get_mid_nodes(good_conns):
 
   return mid_nodes
 
+def dead_end():
+  #TODO implement checking for dead ends
+  pass
 

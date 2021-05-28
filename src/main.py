@@ -13,16 +13,12 @@ def main():
     negative_radnom = [f for f in listdir(pth) if isfile(join(pth, f)) and "-" in f and f[-1] == '0']
     negative_repeating = [f for f in listdir(pth) if isfile(join(pth, f)) and "-" in f and f[-1] != '0']
 
-    for i in negative_radnom:
-
-        # positive/negative instance filter
-        # if ("+" in i or i[-1] != '0'):
-        #     continue
-
-        print(i)
-
+    for i in positive_what:
         run(i)
-    # run("35.200-40")
+    print("================================")
+    for i in positive_random:
+        run(i)
+    # run("9.200+20")
 
     # for i in files[:6]:
     #
@@ -67,7 +63,7 @@ def main():
 
 def run(filename):
     reads = Loader(f'../res/{filename}').loadReads()
-    min_overlap = 6
+    min_overlap = 9
 
     pairs, reversed_pairs = g.pairUp(reads, min_overlap)
 
@@ -75,11 +71,12 @@ def run(filename):
     show_edge_dir = True
     # g.showGraph(pairs, show_edge_val, show_edge_dir)
 
-    good_connections = g.get_good_connections(pairs, reversed_pairs, reads, 7)
+    good_connections = g.get_good_connections(pairs, reversed_pairs, reads, 9)
     # g.showGraph(good_connections, show_edge_val, False)
 
     path = g.simple_path(good_connections, pairs, reversed_pairs, reads)
-    g.show_path_graph(pairs, show_edge_val, show_edge_dir, path,filename)
+    print(filename, "  Path length:  " ,len(path))
+    # g.show_path_graph(pairs, show_edge_val, show_edge_dir, path,filename)
 
 if __name__ == "__main__":
     main()

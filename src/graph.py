@@ -81,7 +81,7 @@ def show_path_graph(dict,show_edge_val,show_edge_dir,path,filename):
           g.add_edge(k, next_node[0], label=str(next_node[1]), arrowStrikethrough=not show_edge_val)
       except:
         g.add_edge(k, next_node[0], label=str(next_node[1]), arrowStrikethrough=not show_edge_val)
-    pos = False
+    pos = None
 
   nt = Network('948px', '1888px',directed=show_edge_dir)
 
@@ -145,6 +145,8 @@ def simple_path(good_conns,graph,reversed_graph,all_nodes):
   return seq
 
 #TODO make the code cleaner
+#recursive function - finds the best next node in a greedy way
+#appends the node to the path
 def best_next_node(graph,node,visited,seq):
 
   nd = graph[node]
@@ -159,12 +161,29 @@ def best_next_node(graph,node,visited,seq):
         seq.append(i[0])
         best_next_node(graph, i[0], visited, seq)
         break
+
+    if maxx < 1:
+      break
+
+    for i in nd:
+      if int(i[1]) == maxx and visited[i[0]] == False:
+        next = True
+        maxx = 0
+        visited[i[0]] = True
+        seq.append(i[0])
+        if (i[0] in graph):
+          best_next_node(graph, i[0], visited, seq)
+        break
+
+
+
     maxx -= 1
     if maxx < 1:
       break
 
+#recursive function - finds the best previous node (from reversed graph) in a greedy way
+#puts the node at index 0 of the path list
 def best_prev_node(graph,node,visited,seq):
-
 
     nd = graph[node]
     maxx = 9
@@ -178,6 +197,20 @@ def best_prev_node(graph,node,visited,seq):
           seq.insert(0,i[0])
           best_prev_node(graph, i[0], visited, seq)
           break
+
+      if maxx < 1:
+        break
+
+      for i in nd:
+        if int(i[1]) == maxx and visited[i[0]] == False:
+          next = True
+          maxx = 0
+          visited[i[0]] = True
+          seq.insert(0, i[0])
+          if (i[0] in graph):
+            best_prev_node(graph, i[0], visited, seq)
+          break
+
       maxx -= 1
       if maxx < 1:
         break
@@ -204,7 +237,4 @@ def get_mid_nodes(good_conns):
 
   return mid_nodes
 
-def dead_end():
-  #TODO implement checking for dead ends
-  pass
 

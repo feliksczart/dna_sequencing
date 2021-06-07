@@ -123,24 +123,19 @@ def get_good_connections(graph,reversed_graph, all_nodes,min_conn):
 
   return good_conns
 
-def simple_path(good_conns,graph,reversed_graph,all_nodes):
+def simple_path(good_conns,graph,reversed_graph,all_nodes,max_length):
   tmp = [False for _ in range(len(all_nodes))]
   visited = dict(zip(all_nodes,tmp))
 
-  tmp = get_mid_nodes(good_conns)
+  mid_nodes = get_mid_nodes(good_conns)
 
-  node = starting_node(tmp, graph, reversed_graph)
+  node = starting_node(mid_nodes, graph, reversed_graph)
   visited[node] = True
 
   seq = [node]
 
   best_next_node(graph, node, visited, seq)
   best_prev_node(reversed_graph,node, visited, seq)
-
-  #check for repeating nodes
-  if(len(set(seq)) != len(seq)):
-    print("Seome nodes are repeating!!")
-
 
   return seq
 
@@ -216,12 +211,12 @@ def best_prev_node(graph,node,visited,seq):
         break
 
 def starting_node(good_conns,graph,reversed_graph):
-  gc = good_conns
-  for node in gc:
+  for node in good_conns:
     for i in good_conns[node]:
-      if i in graph[node]:
-        if i in reversed_graph[node]:
+      for j in good_conns[node]:
+        if i in graph[node] and j in reversed_graph[node] and i is not j:
           return node
+
 
 def get_mid_nodes(good_conns):
   mid_nodes = {}
@@ -236,5 +231,6 @@ def get_mid_nodes(good_conns):
       mid_nodes[node] = connected_nodes
 
   return mid_nodes
+
 
 

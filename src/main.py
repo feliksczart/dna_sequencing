@@ -3,6 +3,7 @@ from src.loader import Loader
 import src.graph as g
 from os import listdir
 from os.path import isfile, join
+import time
 
 def main():
     # positive/negative instance filter
@@ -12,25 +13,26 @@ def main():
     negative_random = [f for f in listdir(pth) if isfile(join(pth, f)) and "-" in f and f[-1] == '0']
     negative_repeating = [f for f in listdir(pth) if isfile(join(pth, f)) and "-" in f and f[-1] != '0']
 
-    for j in range(9,10):
-        print(f"Minimal overlap:  {j}   ~~~~~~~~~~~~~~~~~~")
+    for j in range(3,10):
+        print(f"Minimal overlap:  {j}   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
-        for i in positive_what:
-            run(i,j)
-        print("================================")
-        for i in positive_random:
-            run(i,j)
+        # for i in positive_what:
+        #     run(i,j)
+        # print("============================================")
+        # for i in positive_random:
+        #     run(i,j)
         # for i in negative_random:
         #     run(i,j)
-        # print("================================")
+        # print("===========================================")
         # for i in negative_repeating:
         #     run(i,j)
-        # run("9.200+80",j)
+        run("55.400-160",j)
 
 def run(filename,mo):
     reads = Loader(f'../res/{filename}').loadReads()
     min_overlap = mo
 
+    begin_time = time.time()
     pairs, reversed_pairs = g.pairUp(reads, min_overlap)
 
     show_edge_val = True
@@ -41,9 +43,11 @@ def run(filename,mo):
     # g.showGraph(good_connections, show_edge_val, False)
 
     length = best_path_length(filename)
+
     path = g.simple_path(good_connections, pairs, reversed_pairs, reads,length)
-    print(filename, "  Path length:  " ,len(path), f"/ {length}")
-    # g.show_path_graph(pairs, show_edge_val, show_edge_dir, path,filename)
+    elapsed_time = time.time() - begin_time
+    print(filename, "  Path length:  " ,len(path), f"/ {length}  Time: {round(elapsed_time,4)}")
+    g.show_path_graph(pairs, show_edge_val, show_edge_dir, path,filename)
 
 def best_path_length(filename):
     for index, i in enumerate(filename):

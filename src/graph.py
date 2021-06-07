@@ -76,12 +76,20 @@ def show_path_graph(dict,show_edge_val,show_edge_dir,path,filename):
     for next_node in v:
       try:
         if next_node[0] == path[pos+1]:
-          g.add_edge(k, next_node[0],label=str(next_node[1]),arrowStrikethrough=not show_edge_val,color = 'red',width = 10)
+          pass
         else:
           g.add_edge(k, next_node[0], label=str(next_node[1]), arrowStrikethrough=not show_edge_val)
       except:
         g.add_edge(k, next_node[0], label=str(next_node[1]), arrowStrikethrough=not show_edge_val)
     pos = None
+
+#drawing path
+  for i, conn in enumerate(path):
+    try:
+      g.add_edge(conn, path[i+1], label=str(" "), arrowStrikethrough=not show_edge_val, color='red',
+                 width=10)
+    except:
+      pass
 
   nt = Network('948px', '1888px',directed=show_edge_dir)
 
@@ -129,13 +137,44 @@ def simple_path(good_conns,graph,reversed_graph,all_nodes,max_length):
 
   mid_nodes = get_mid_nodes(good_conns)
 
-  node = starting_node(mid_nodes, graph, reversed_graph)
+  node = starting_node(mid_nodes, graph, reversed_graph, visited)
   visited[node] = True
 
   seq = [node]
 
   best_next_node(graph, node, visited, seq)
   best_prev_node(reversed_graph,node, visited, seq)
+
+#finding all the major disconnected graphs
+  if len(seq) < max_length:
+    sequences = []
+    while(True):
+      node = starting_node(mid_nodes, graph, reversed_graph, visited)
+
+      if node is None:
+        sequences.append(seq)
+        sorted_seq = []
+        for s in sequences:
+          sorted_seq.append((len(s), s))
+
+        sorted_seq.sort(reverse= True)
+
+        seq = []
+        for s in sorted_seq:
+          if (len(seq) + s[0]) < max_length:
+            seq += s[1]
+          else:
+            return seq
+
+        return seq
+
+      visited[node] = True
+
+      tmps = [node]
+      best_next_node(graph, node, visited, tmps)
+      best_prev_node(reversed_graph, node, visited, tmps)
+
+      sequences.append(tmps)
 
   return seq
 
@@ -210,12 +249,17 @@ def best_prev_node(graph,node,visited,seq):
       if maxx < 1:
         break
 
-def starting_node(good_conns,graph,reversed_graph):
+def starting_node(good_conns,graph,reversed_graph,visited):
   for node in good_conns:
-    for i in good_conns[node]:
-      for j in good_conns[node]:
-        if i in graph[node] and j in reversed_graph[node] and i is not j:
-          return node
+    if not visited[node]:
+      for i in good_conns[node]:
+        for j in good_conns[node]:
+          try:
+            if i in graph[node] and j in reversed_graph[node] and i is not j:
+              return node
+          except:
+            pass
+  return None
 
 
 def get_mid_nodes(good_conns):

@@ -98,13 +98,6 @@ def show_path_graph(dict,show_edge_val,show_edge_dir,path,filename):
 
   nt.show(f'{filename}.html')
 
-def dfs(visited, graph, node):
-  if node not in visited:
-      visited.add(node)
-      for neighbour in graph[node]:
-          dfs(visited, graph, neighbour[0])
-  return visited
-
 #returns vertices with value in range for each node
 def get_good_connections(graph,reversed_graph, all_nodes,min_conn):
   best_connection = len(list(graph.keys())[0]) - 1
@@ -161,7 +154,7 @@ def simple_path(good_conns,graph,reversed_graph,all_nodes,max_length):
 
         seq = []
         for s in sorted_seq:
-          if (len(seq) + s[0]) < max_length:
+          if (len(seq) + s[0]) <= max_length:
             seq += s[1]
           else:
             return seq
@@ -175,6 +168,8 @@ def simple_path(good_conns,graph,reversed_graph,all_nodes,max_length):
       best_prev_node(reversed_graph, node, visited, tmps)
 
       sequences.append(tmps)
+  elif len(seq) > max_length:
+    return []
 
   return seq
 
